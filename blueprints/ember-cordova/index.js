@@ -3,6 +3,7 @@
 var CreateTask            = require('../../lib/tasks/create-cordova-project');
 var UpdateGitIgnore       = require('../../lib/tasks/update-gitignore');
 var UpdateWatchmanIgnore  = require('../../lib/tasks/update-watchman-config');
+var CreateConfigJson      = require('../../lib/tasks/create-config-json');
 var camelize              = require('../../lib/utils/string.js').camelize;
 
 module.exports = {
@@ -58,7 +59,13 @@ module.exports = {
       ui: this.ui
     });
 
+    var createConfigJson = new CreateConfigJson({
+      project: this.project,
+      ui: this.ui
+    })
+
     return create.run(options.templatePath)
+           .then(createConfigJson.prepare())
            .then(updateGitIgnore.prepare())
            .then(updateWatchmanIgnore.prepare());
   }
